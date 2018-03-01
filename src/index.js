@@ -2,64 +2,46 @@ module.exports = function count(s, pairs) {
 	var N=1;
 	var array=[];
 	var counter=0;
+	
+	
 	for(let i=0;i<pairs.length;i++){
 
 		array.push(pairs[i][0]);
 		N*=pairs[i][0];
 	}
-	if(N>100000) return "no solution for bigs number";
-	//console.log(array);
-
-	for(let i=0;i<s.length;i++){
-		
-		let mask=Number(s[i]);
-		let simpleMultipliers;
-		//console.log(mask);
-
-		for(let j=1;j<N+1;j++){
-			simpleMultipliers=getSimpleMultipliers(j+i);
-			//console.log(simpleMultipliers);
-			let flag=false;
-			for(let key in simpleMultipliers){
-				//console.log(array.indexOf(Number(key)));
-				if(array.indexOf(Number(key))==-1){
-					flag=true;
-				}			
-			}
-			
+	if(s.length>4||N>1000000000) return ""
+	for(let maskLetter=0;maskLetter<s.length;maskLetter++){
+		let mask=Number(s[maskLetter]);
+		for(let i=1;i<N+1;i++){
+			//console.log("i="+i+" :"+EuclidsAlgorithm(i,N));
 			if(mask){
-				if(flag){
+				if(EuclidsAlgorithm(i,N)===1){
 					counter++;
+					//console.log("check")
 				}
-			} else{
-				if(!flag){
+			}else{
+				if(EuclidsAlgorithm(i,N)!==1){
 					counter++;
 				}
 			}
-			
-		}	
-		
-		
+		}		
 	}
-	//console.log(N);
-  // your implementation
+
+
   return counter;
 }
 
-function getSimpleMultipliers(num){
-	let tempArr=[],tempObj={};
-	if(num==1) return {"1":1}
-	for(let i =2; i<=num;i++){
-		if(num%i === 0){
-			tempObj[i]=1;
-			num=num/i;
+function EuclidsAlgorithm(a,b){
+	//console.log("evklid "+a+":"+b);
+	while(a!==0&&b!==0){
+		if(a>b){
+			a=a%b;
+		} else{
+			b=b%a;
 		}
-
-		while(num%i ===0){
-			num=num/i;
-			tempObj[i]++;
-		}
-		
 	}
-	return tempObj;
+	return (a+b);
+
 }
+
+
